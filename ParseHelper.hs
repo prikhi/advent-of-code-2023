@@ -11,7 +11,7 @@ import qualified GHC.Arr as A
 
 
 -- | Run a parser on each line of the input file.
-parseInput :: Show x => ReadP x -> String -> [x]
+parseInput :: (Show x) => ReadP x -> String -> [x]
 parseInput parser =
     parseInputRaw $ sepBy parser newline <* end
   where
@@ -19,7 +19,7 @@ parseInput parser =
 
 
 -- | Run a parser on the full input file.
-parseInputRaw :: Show x => ReadP x -> String -> x
+parseInputRaw :: (Show x) => ReadP x -> String -> x
 parseInputRaw parser str =
     let results = readP_to_S parser str
         successes = filter ((== "") . snd) results
@@ -29,6 +29,14 @@ parseInputRaw parser str =
                 error $ "Parsing failure, longest attempt: " <> show (head longestAttempts)
             Just success ->
                 fst success
+
+
+-- | Run a parser
+runParser :: ReadP x -> String -> Maybe x
+runParser parser str =
+    let results = readP_to_S parser str
+        successes = filter ((== "") . snd) results
+     in fst <$> listToMaybe successes
 
 
 -- | Parse a newline or a carriage-return & newline.
@@ -64,8 +72,8 @@ parseIntGrid = do
     ls <- sepBy (many1 $ satisfy isDigit) newline <* newline
     let height = length ls
         width = minimum $ map length ls
-    return $
-        A.array
+    return
+        $ A.array
             ((0, 0), (height - 1, width - 1))
             [ ((w, h), c)
             | h <- [0 .. height - 1]
@@ -80,8 +88,8 @@ parseCharGrid validChar = do
     ls <- sepBy (many1 $ satisfy validChar) newline
     let height = length ls
         width = minimum $ map length ls
-    return $
-        A.array
+    return
+        $ A.array
             ((0, 0), (width - 1, height - 1))
             [ ((w, h), c)
             | h <- [0 .. height - 1]
