@@ -10,7 +10,7 @@ module Data.MultiSet (
     totalSize,
 ) where
 
-import qualified Data.Map as M
+import Data.Map qualified as M
 
 
 newtype MultiSet a = MultiSet
@@ -25,12 +25,12 @@ empty = MultiSet M.empty
 
 
 -- | Insert an element into the MultiSet
-insert :: Ord a => a -> MultiSet a -> MultiSet a
+insert :: (Ord a) => a -> MultiSet a -> MultiSet a
 insert k = MultiSet . M.upsert (maybe 1 succ) k . fromMultiSet
 
 
 -- | Remove one instance of an element from the MultiSet
-delete :: Ord a => a -> MultiSet a -> MultiSet a
+delete :: (Ord a) => a -> MultiSet a -> MultiSet a
 delete k =
     MultiSet
         . M.upsert

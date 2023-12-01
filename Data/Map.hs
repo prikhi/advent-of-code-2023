@@ -68,7 +68,7 @@ empty = Leaf
 
 
 -- | Build a Map from a list of (key, value) pairs
-fromList :: Ord a => [(a, b)] -> Map a b
+fromList :: (Ord a) => [(a, b)] -> Map a b
 fromList = foldl' (\acc (k, v) -> insert k v acc) empty
 
 
@@ -107,7 +107,7 @@ foldrWithKeys reducer acc = \case
 
 
 -- | Insert the value at the given key, overriding any existing value
-insert :: Ord a => a -> b -> Map a b -> Map a b
+insert :: (Ord a) => a -> b -> Map a b -> Map a b
 insert !k !v = \case
     Leaf ->
         Branch $ BranchData Leaf k v Leaf
@@ -119,7 +119,7 @@ insert !k !v = \case
 
 
 -- | Insert or update a value for the key.
-upsert :: Ord a => (Maybe b -> b) -> a -> Map a b -> Map a b
+upsert :: (Ord a) => (Maybe b -> b) -> a -> Map a b -> Map a b
 upsert maker k = \case
     Leaf ->
         Branch $ BranchData Leaf k (maker Nothing) Leaf
@@ -131,7 +131,7 @@ upsert maker k = \case
 
 
 -- | Query the Map for the given key
-lookup :: Ord a => a -> Map a b -> Maybe b
+lookup :: (Ord a) => a -> Map a b -> Maybe b
 lookup k = \case
     Leaf -> Nothing
     Branch BranchData {..} ->

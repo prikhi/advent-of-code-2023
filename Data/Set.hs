@@ -9,7 +9,7 @@ module Data.Set (
 
 import Data.Maybe (isJust)
 
-import qualified Data.Map as M
+import Data.Map qualified as M
 
 
 -- | Uniqueness Sets via Binary Search Trees.
@@ -34,7 +34,7 @@ empty = Set M.empty
 
 
 -- | List to Set conversion
-fromList :: Ord a => [a] -> Set a
+fromList :: (Ord a) => [a] -> Set a
 fromList xs = Set . M.fromList . zip xs $ repeat ()
 
 
@@ -44,10 +44,10 @@ toList = map fst . M.toList . fromSet
 
 
 -- | Insert an element into the Set
-insert :: Ord a => a -> Set a -> Set a
+insert :: (Ord a) => a -> Set a -> Set a
 insert k = Set . M.insert k () . fromSet
 
 
 -- | Does the Set contain the given element?
-contains :: Ord a => a -> Set a -> Bool
+contains :: (Ord a) => a -> Set a -> Bool
 contains k = isJust . M.lookup k . fromSet

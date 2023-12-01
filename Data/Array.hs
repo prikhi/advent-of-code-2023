@@ -13,8 +13,7 @@ module Data.Array (
 import Data.Function
 import GHC.Arr as A
 
-import qualified Data.List as L
-import Debug.Trace
+import Data.List qualified as L
 
 
 -- | Build a 0-indexed Array from a list.
@@ -50,7 +49,7 @@ sparseGrid defaultVal points =
 
 
 -- | Render a grid line by line using the elements 'show' function.
-showGrid :: Show a => A.Array (Int, Int) a -> String
+showGrid :: (Show a) => A.Array (Int, Int) a -> String
 showGrid =
     showGridWith show
 {-# INLINEABLE showGrid #-}

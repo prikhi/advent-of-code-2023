@@ -88,7 +88,7 @@ parseDigitList = do
     fmap catMaybes
         . many1
         $ (Just <$> parseDigit)
-        <++ (Nothing <$ satisfy isAlpha)
+            <++ (Nothing <$ satisfy isAlpha)
   where
     parseDigit :: ReadP Digit
     parseDigit =

@@ -7,7 +7,7 @@ import Data.List (sortOn)
 import Data.Maybe (listToMaybe)
 import Text.ParserCombinators.ReadP
 
-import qualified GHC.Arr as A
+import GHC.Arr qualified as A
 
 
 -- | Run a parser on each line of the input file.
@@ -72,8 +72,8 @@ parseIntGrid = do
     ls <- sepBy (many1 $ satisfy isDigit) newline <* newline
     let height = length ls
         width = minimum $ map length ls
-    return
-        $ A.array
+    return $
+        A.array
             ((0, 0), (height - 1, width - 1))
             [ ((w, h), c)
             | h <- [0 .. height - 1]
@@ -88,8 +88,8 @@ parseCharGrid validChar = do
     ls <- sepBy (many1 $ satisfy validChar) newline
     let height = length ls
         width = minimum $ map length ls
-    return
-        $ A.array
+    return $
+        A.array
             ((0, 0), (width - 1, height - 1))
             [ ((w, h), c)
             | h <- [0 .. height - 1]
