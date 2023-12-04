@@ -1,30 +1,12 @@
-{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE MultiWayIf #-}
-{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE TupleSections #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE ViewPatterns #-}
 
 module Day04 where
 
-import Control.Arrow ((&&&))
 import Control.Monad
 import Control.Monad.ST
 import Data.Array (Array)
-import Data.Bifunctor
-import Data.Char
-import Data.Either
-import Data.Foldable
-import Data.Function (on)
-import Data.Functor
-import Data.Map (Map)
-import Data.Maybe
-import Data.MultiSet (MultiSet)
-import Data.Set (Set)
 import Text.ParserCombinators.ReadP
 
 import Harness
@@ -32,11 +14,6 @@ import ParseHelper
 
 import Data.Array qualified as A
 import Data.List qualified as L
-import Data.Map qualified as M
-import Data.MultiSet qualified as MS
-import Data.Set qualified as S
-
-import Debug.Trace
 
 
 -- (parseInput lineParser) OR (parseInputRaw fullInputParser)
@@ -64,7 +41,7 @@ calculatePoints c =
             else 2 ^ (length matches - 1)
 
 
-playCards :: [Card] -> A.Array Int Int
+playCards :: [Card] -> Array Int Int
 playCards cards = runST $ do
     arr <- A.newSTArray (1, maxIx) 1
     foldM_ (playCard arr) () cards
