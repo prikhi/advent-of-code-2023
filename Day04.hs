@@ -44,17 +44,16 @@ calculatePoints c =
 playCards :: [Card] -> Array Int Int
 playCards cards = runST $ do
     arr <- A.newSTArray (1, maxIx) 1
-    foldM_ (playCard arr) () cards
+    mapM_ (playCard arr) cards
     A.freezeSTArray arr
   where
     maxIx :: Int
     maxIx =
         length cards
-    playCard :: A.STArray s Int Int -> () -> Card -> ST s ()
-    playCard arr _ card = do
+    playCard :: A.STArray s Int Int -> Card -> ST s ()
+    playCard arr card = do
         let matches = card.winningNumbers `L.intersect` card.ourNumbers
-            nextIds =
-                [card.cardId + 1 .. card.cardId + length matches]
+            nextIds = [card.cardId + 1 .. card.cardId + length matches]
         cardCount <- A.readSTArray arr card.cardId
         forM_ nextIds $ \nextId -> when (nextId <= maxIx) $ do
             nextCount <- A.readSTArray arr nextId
