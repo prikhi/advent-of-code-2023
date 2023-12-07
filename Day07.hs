@@ -7,6 +7,7 @@
 
 module Day07 where
 
+import Control.Arrow ((&&&))
 import Control.Monad
 import Data.Char
 import Data.Function (on)
@@ -34,7 +35,11 @@ calcTotalWinnings =
     calcWinnings :: Int -> Hand -> Int
     calcWinnings rank hand = rank * hand.bet
     sortAndGroupOn :: (Ord b, Eq b) => (a -> b) -> [a] -> [[a]]
-    sortAndGroupOn f = L.groupBy ((==) `on` f) . L.sortOn f
+    sortAndGroupOn f =
+        map (map snd)
+            . L.groupBy ((==) `on` fst)
+            . L.sortOn fst
+            . map (f &&& id)
 
 
 -- HELPERS
