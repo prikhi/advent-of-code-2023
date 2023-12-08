@@ -7,6 +7,7 @@ module Data.Map (
     empty,
     fromList,
     toList,
+    keys,
     mapKeys,
     foldrWithKeys,
     insert,
@@ -72,11 +73,16 @@ fromList :: (Ord a) => [(a, b)] -> Map a b
 fromList = foldl' (\acc (k, v) -> insert k v acc) empty
 
 
--- | Map to Lis conversion
+-- | Map to List conversion
 toList :: Map a b -> [(a, b)]
 toList = \case
     Leaf -> []
     Branch BranchData {..} -> concat [toList bdLeft, [(bdKey, bdVal)], toList bdRight]
+
+
+-- | Extract all keys from a Map
+keys :: Map k v -> [k]
+keys = foldrWithKeys (\k _ ks -> k : ks) []
 
 
 -- | Modify all keys of a map
