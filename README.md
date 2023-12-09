@@ -1,4 +1,4 @@
-# Advent of Code 2022
+# Advent of Code 2023
 
 To run a solution do something like:
 
