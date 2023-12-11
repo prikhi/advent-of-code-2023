@@ -27,7 +27,10 @@ main = getInputAndSolve (parseInputRaw parseGrid) (sumPairPaths 1) (sumPairPaths
 sumPairPaths :: Int -> Grid -> Int
 sumPairPaths expansionAmount g =
     let galaxyLocs = expandUniverse expansionAmount g
-        pairs = concatMap (\(g1, gs) -> (g1,) <$> gs) . zip galaxyLocs $ L.tails (drop 1 galaxyLocs)
+        pairs =
+            concatMap (\(g1, gs) -> (g1,) <$> gs)
+                . zip galaxyLocs
+                $ L.tails (drop 1 galaxyLocs)
      in sum $ map calcDistance pairs
   where
     calcDistance :: ((Int, Int), (Int, Int)) -> Int
@@ -39,17 +42,33 @@ sumPairPaths expansionAmount g =
 expandUniverse :: Int -> Grid -> [(Int, Int)]
 expandUniverse expansionAmount g =
     let initialGalaxies = findGalaxies g
-        (blankCols, blankRows) = bimap incrementSuccessive incrementSuccessive $ findBlanks g
+        (blankCols, blankRows) =
+            bimap incrementSuccessive incrementSuccessive $
+                findBlanks g
      in foldl' expandRows (foldl' expandColumns initialGalaxies blankCols) blankRows
   where
     incrementSuccessive :: [Int] -> [Int]
     incrementSuccessive = zipWith (\i -> (+) (i * expansionAmount)) [0 ..]
 
     expandColumns :: [(Int, Int)] -> Int -> [(Int, Int)]
-    expandColumns gs blankCol = map (\coords@(x, y) -> if x > blankCol then (expansionAmount + x, y) else coords) gs
+    expandColumns gs blankCol =
+        map
+            ( \coords@(x, y) ->
+                if x > blankCol
+                    then (expansionAmount + x, y)
+                    else coords
+            )
+            gs
 
     expandRows :: [(Int, Int)] -> Int -> [(Int, Int)]
-    expandRows gs blankRow = map (\coords@(x, y) -> if y > blankRow then (x, expansionAmount + y) else coords) gs
+    expandRows gs blankRow =
+        map
+            ( \coords@(x, y) ->
+                if y > blankRow
+                    then (x, expansionAmount + y)
+                    else coords
+            )
+            gs
 
 
 findGalaxies :: Grid -> [(Int, Int)]
