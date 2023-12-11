@@ -96,3 +96,19 @@ parseCharGrid validChar = do
             , w <- [0 .. width - 1]
             , let c = ls !! h !! w
             ]
+
+
+-- | Parse a grid, converting each character into a discrete type.
+parseValueGrid :: ReadP a -> ReadP (A.Array (Int, Int) a)
+parseValueGrid parseChar = do
+    ls <- sepBy (many1 parseChar) newline
+    let height = length ls
+        width = minimum $ map length ls
+    return $
+        A.array
+            ((0, 0), (width - 1, height - 1))
+            [ ((w, h), c)
+            | h <- [0 .. height - 1]
+            , w <- [0 .. width - 1]
+            , let c = ls !! h !! w
+            ]
